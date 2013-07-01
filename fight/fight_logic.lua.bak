@@ -131,7 +131,7 @@ function doFight(RoleLayer)
 					array:addObject(t1)
 					
 					table.remove(Barr, random_i)
-					
+					--CCLuaLog("removeB")
 				end
 			end
 	
@@ -147,7 +147,7 @@ function doFight(RoleLayer)
 				v.bout = Tbout
 				--被攻击方气血为0则移除
 				if Aarr[random_i].Hp <= 0 then
-					
+					CCLuaLog("removeA")
 					--死亡动画
 					local deadAnimate = Aarr[random_i]:action("dead")
 					local t1 = CCTargetedAction:create(Aarr[random_i].mRoleSprite, deadAnimate)
