@@ -1,5 +1,6 @@
 --输入场上目标进行攻击运算
 math.randomseed(os.time())
+require "fight/fight_Skills"	--技能
 
 -----分组，站位
 local function grouping(RoleLayer)
@@ -35,65 +36,90 @@ local function grouping(RoleLayer)
 	return Aarr, Barr
 end
 
-------攻击和动画
-local function fightAB(roleAtt, roleDef, array)
 
-	--攻击动作
-	local attAnimate = roleAtt:action("att")
-	local t1 = CCTargetedAction:create(roleAtt.mRoleSprite, attAnimate)
-	array:addObject(t1)
-	
-	--一定几率不中--
-	require "fight/otherAction"
-	local probability = math.random(1, 100)
-	if probability > 50 then		
-		local function missBegin()
-			effectFactory(roleDef, "miss")		
-		end
-		local function missEnd()
-			--roleDef.meffectSprite:setVisible(false)
-			roleDef.meffectSprite:setTexture(nil)		
-		end
-		array:addObject(CCCallFuncN:create(missBegin))
-		array:addObject(CCDelayTime:create(1))
-		array:addObject(CCCallFuncN:create(missEnd))
-		
-		
-	else	
-		--原始气血
-		local oldHP = roleDef.Hp
-		
-	----数值逻辑------
-		--有50%几率暴击
-		local probability = math.random(1, 100)
-		if probability > 50 then
-			roleDef.Hp = roleDef.Hp - roleAtt.Att * 2
-			--火特效
-			local function clearEffect()
-				--roleDef.meffectSprite:setVisible(false)
-				roleDef.meffectSprite:setTexture(nil)		
-			end
-			local to_effect_fire = effectFactory(roleDef, "fire", array)
-			CCLuaLog(tostring(tofire))
-			array:addObject(to_effect_fire)
-			array:addObject(CCCallFuncN:create(clearEffect))
-		else
-			roleDef.Hp = roleDef.Hp - roleAtt.Att
+--目标选择(输入指令)
+local function FightOrder(AUndeadRoleArr, BUndeadRoleArr, array)
+	--取出A方攻击
+	for _, roleAtt in ipairs(AUndeadRoleArr) do
+		if #BUndeadRoleArr <= 0 then
+			break
 		end
 		
-	----动画表现------
-		--防守方受击
-		local hitAnimate = roleDef:hit()
-		--更新气血
-		local updateHp = roleDef:updateHp(oldHP)
+		--随机取出被攻击目标			
+		local random_i = math.random(1, #BUndeadRoleArr)
+		local roleDef = BUndeadRoleArr[random_i]
+		
+		--使用技能(攻击动画)
+		local attAnimate = roleAtt:action("att")
+		local t1 = CCTargetedAction:create(roleAtt.mRoleSprite, attAnimate)
+		array:addObject(t1)
+		
+		--随机选择1个技能
+		local randi = math.random(1, #roleAtt.Skills)
+		randskill = roleAtt.Skills[randi]
+		Skills[randskill](roleAtt, roleDef, array)
+		
+		--被攻击方气血为0则移除
+		if roleDef.Hp <= 0 then
+			roleDef.dead = true
+			--死亡动画
+			local deadAnimate = roleDef:action("dead")
+			local t1 = CCTargetedAction:create(roleDef.mRoleSprite, deadAnimate)
+			array:addObject(t1)
 			
-		local to_hit = CCTargetedAction:create(roleDef.mRoleSprite, hitAnimate)
-		local to_updateHp = CCTargetedAction:create(roleDef.mHpSprite, updateHp)
+			table.remove(BUndeadRoleArr, random_i)
+			
+		end
+	end
+
+	--B方攻击
+	for _, roleAtt in ipairs(BUndeadRoleArr) do
+		if #AUndeadRoleArr <= 0 then
+			break
+		end			
 		
+		--取出被攻击目标
+		local random_i = math.random(1, #AUndeadRoleArr)
+		local roleDef = AUndeadRoleArr[random_i]
+				
+		--使用技能
+		local attAnimate = roleAtt:action("att")
+		local t1 = CCTargetedAction:create(roleAtt.mRoleSprite, attAnimate)
+		array:addObject(t1)	
+
+		--随机技能100 or  101
+		local randskill = math.random(100, 101)
+		Skills[randskill](roleAtt, roleDef, array)
+
+		--被攻击方气血为0则移除
+		if roleDef.Hp <= 0 then
+			roleDef.dead = true
+			--死亡动画
+			local deadAnimate = roleDef:action("dead")
+			local t1 = CCTargetedAction:create(roleDef.mRoleSprite, deadAnimate)
+			array:addObject(t1)
+			
+			table.remove(AUndeadRoleArr, random_i)
+			
+		end
+	end
+				
+	---------log--------------	
+	CCLuaLog("----Tbout:"..tostring(Tbout).."----")
+	
+	for _, role in pairs(AUndeadRoleArr) do	
+		CCLuaLog(tostring(role.name)..":"..tostring(role.Hp))
 		
-		array:addObject(to_hit)
-		array:addObject(to_updateHp)
-	end	
+	end
+	for _, role in pairs(BUndeadRoleArr) do	
+		CCLuaLog(tostring(role.name)..":"..tostring(role.Hp))
+		
+	end
+	CCLuaLog("Aarr.len:"..tostring(#AUndeadRoleArr))
+	CCLuaLog("Barr.len:"..tostring(#BUndeadRoleArr))
+	---------log--------------	
+
+
 end
 
 ----------
@@ -107,71 +133,28 @@ function doFight(RoleLayer)
 	local array = CCArray:create()
 	--循环检查战斗
 	while fightStart == true do
+		--记录A方未死目标
+		local AUndeadRoleArr = {}
+		local BUndeadRoleArr = {}
+		
+		for _, role in pairs(Aarr) do		
+			if (role.dead == false) then
+				table.insert(AUndeadRoleArr, role)				
+			end
+		end
+		
+		for _, role in pairs(Barr) do		
+			if (role.dead == false) then
+				table.insert(BUndeadRoleArr, role)
+			end
+		end
 
 		--如果AB两方其中一方单位为0则结束战斗
-		if (#Aarr > 0) and (#Barr > 0) then
+		if (#AUndeadRoleArr > 0) and (#BUndeadRoleArr > 0) then
 			--记录回合数
 			Tbout = Tbout + 1
-			
-			--取出A方攻击
-			for _, v in ipairs(Aarr) do
-				if #Barr <= 0 then
-					break
-				end
-				--随机取出被攻击目标			
-				local random_i = math.random(1, #Barr)
-				
-				fightAB(v, Barr[random_i], array)
-				v.bout = Tbout
-				--被攻击方气血为0则移除
-				if Barr[random_i].Hp <= 0 then
-					--死亡动画
-					local deadAnimate = Barr[random_i]:action("dead")
-					local t1 = CCTargetedAction:create(Barr[random_i].mRoleSprite, deadAnimate)
-					array:addObject(t1)
-					
-					table.remove(Barr, random_i)
-					--CCLuaLog("removeB")
-				end
-			end
-	
-			--B方攻击
-			for _, v in ipairs(Barr) do
-				if #Aarr <= 0 then
-					break
-				end			
-				--取出被攻击目标
-				local random_i = math.random(1, #Aarr)
-				
-				fightAB(v, Aarr[random_i], array)
-				v.bout = Tbout
-				--被攻击方气血为0则移除
-				if Aarr[random_i].Hp <= 0 then
-					CCLuaLog("removeA")
-					--死亡动画
-					local deadAnimate = Aarr[random_i]:action("dead")
-					local t1 = CCTargetedAction:create(Aarr[random_i].mRoleSprite, deadAnimate)
-					array:addObject(t1)
-					
-					table.remove(Aarr, random_i)
-					
-				end
-			end
-						
-			---------log--------------	
-			CCLuaLog("----Tbout:"..tostring(Tbout).."----")
-			
-			for _, role in pairs(Aarr) do	
-				CCLuaLog(tostring(role.name)..":"..tostring(role.Hp))
-				
-			end
-			for _, role in pairs(Barr) do	
-				CCLuaLog(tostring(role.name)..":"..tostring(role.Hp))
-				
-			end
-			CCLuaLog("Aarr.len:"..tostring(#Aarr))
-			CCLuaLog("Barr.len:"..tostring(#Barr))
-			---------log--------------	
+			--输入指令
+			FightOrder(AUndeadRoleArr, BUndeadRoleArr, array)
 		else
 			fightStart = false
 			

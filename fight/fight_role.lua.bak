@@ -38,6 +38,7 @@ function Role:setObjData(RoleObjData)
 		"HpMax",
 		"Att",
 		"Horde",
+		"Skills"
 	}
 	
 	--建立角色数据
@@ -47,6 +48,7 @@ function Role:setObjData(RoleObjData)
 	end
 	
 	self.bout = 0	--攻击回合数
+	self.dead = false	--是否死亡
 end
 
 
@@ -54,8 +56,8 @@ end
 function Role:SpriteCreate()
 	local msprite = CCSprite:create()
 
-	local HpMaxSprite = CCSprite:create("HpMaxImg.png")	--最大值血条
-	local HpSprite = CCProgressTimer:create(CCSprite:create("HpImg.png"))	--当前气血
+	local HpMaxSprite = CCSprite:create("image/HpMaxImg.png")	--最大值血条
+	local HpSprite = CCProgressTimer:create(CCSprite:create("image/HpImg.png"))	--当前气血
 	local effectSprite = CCSprite:create()	--特效
 	
 	local rect

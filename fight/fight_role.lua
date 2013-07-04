@@ -38,6 +38,7 @@ function Role:setObjData(RoleObjData)
 		"HpMax",
 		"Att",
 		"Horde",
+		"Skills",
 	}
 	
 	--建立角色数据
@@ -47,6 +48,7 @@ function Role:setObjData(RoleObjData)
 	end
 	
 	self.bout = 0	--攻击回合数
+	self.dead = false	--是否死亡
 end
 
 

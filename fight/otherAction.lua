@@ -11,11 +11,24 @@ function effectFactory(role, effectString)
 		role.meffectSprite:setTextureRect(rect)
 		
 	end
+	
 	if effectString == "fire" then
 		require "animationHelper"
 		local framesList = CCArray:create()
-		local texture = CCTextureCache:sharedTextureCache():addImage("image/fire.png")
+		local texture = CCTextureCache:sharedTextureCache():addImage("image/skilleffect/fire.png")
 		framesList = CutTextureToFrames_CCArray(texture, 10, 1)
+		local animation = CCAnimation:createWithSpriteFrames(framesList, 0.15)
+		local fireAnimate = CCAnimate:create(animation)
+		local to = CCTargetedAction:create(role.meffectSprite, fireAnimate)
+		
+		return to
+	end
+	
+	if effectString == "water" then
+		require "animationHelper"
+		local framesList = CCArray:create()
+		local texture = CCTextureCache:sharedTextureCache():addImage("image/skilleffect/water.png")
+		framesList = CutTextureToFrames_CCArray(texture, 12, 1)
 		local animation = CCAnimation:createWithSpriteFrames(framesList, 0.15)
 		local fireAnimate = CCAnimate:create(animation)
 		local to = CCTargetedAction:create(role.meffectSprite, fireAnimate)

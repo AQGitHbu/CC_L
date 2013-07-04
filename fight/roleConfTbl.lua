@@ -8,6 +8,7 @@ roleConfTbl = {
 		Hp = 200,
 		Att = 90,
 		Horde = "A",
+		Skills = {100, 101},
 	},
 	
 	{
@@ -19,6 +20,7 @@ roleConfTbl = {
 		Hp = 200,
 		Att = 90,
 		Horde = "A",
+		Skills = {100, 101},
 	},
 	
 	{
@@ -30,6 +32,7 @@ roleConfTbl = {
 		Hp = 200,
 		Att = 90,
 		Horde = "B",
+		Skills = {100, 101},
 	},
 	
 	{
@@ -41,6 +44,7 @@ roleConfTbl = {
 		Hp = 200,
 		Att = 90,
 		Horde = "B",
+		Skills = {100, 101},
 	},
 
 }
