@@ -1,0 +1,28 @@
+--±³¾°²ã+½ÇÉ«²ã
+local visibleSize = CCDirector:sharedDirector():getVisibleSize()
+
+--±³¾°²ã
+function createBackgroundLayer()
+	local BackgroundLayer = CCLayer:create()
+	----±³¾°Í¼Æ¬----
+	local bgImg = CCSprite:create("image/farm.jpg")
+	
+	--Í¼Æ¬Î»ÖÃ
+	bgImg:setPosition(visibleSize.width / 2, visibleSize.height /2)
+	
+	----¼ÓÈë±³¾°Í¼
+	BackgroundLayer:addChild(bgImg)
+	
+	return BackgroundLayer
+end
+
+--½ÇÉ«²ã
+function createRoleLayer()
+	local RoleLayer = CCLayer:create()
+	
+	require "testObj/logic"
+	doFight(RoleLayer)
+
+----------------	
+	return RoleLayer
+end
