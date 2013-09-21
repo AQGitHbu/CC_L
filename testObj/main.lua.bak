@@ -11,11 +11,11 @@ local function main()
 	--±³¾°²ã
 	local bgLayer = createBackgroundLayer()
 	Scene_fight:addChild(bgLayer)
-	--[[
+
 	--½ÇÉ«²ã
 	local roleLayer = createRoleLayer()
 	Scene_fight:addChild(roleLayer)
-	]]
+
 	CCDirector:sharedDirector():runWithScene(Scene_fight)
 end
 

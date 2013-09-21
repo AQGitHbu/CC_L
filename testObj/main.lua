@@ -23,7 +23,7 @@ end
 function __G__TRACKBACK__(msg)
 	CCLuaLog("------------------------------------")
 	CCLuaLog("LUA ERROR: " .. tostring(msg) .. "\n")
-	cclog(debug.traceback())
+	CCLuaLog(debug.traceback())
 	CCLuaLog("------------------------------------")
 end
 

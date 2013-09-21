@@ -170,10 +170,13 @@ end
 
 --ÒÆ¶¯
 function Role:ai()
+	local abc = 0
+	while abc<1000 do
 	local x, y = self:getPosition()
 	CCLuaLog(x..","..y)
-	x = x + 50
-	y = y + 50
+	x = x + 5
+	y = y + 5
 	self:setPosition(x, y)
-
+	abc = abc + 1
+	end
 end

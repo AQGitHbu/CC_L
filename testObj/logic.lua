@@ -1,6 +1,6 @@
 --输入场上目标进行攻击运算
 math.randomseed(os.time())
-require "fight/fight_Skills"	--技能
+require "testObj/Skills"	--技能
 
 -----分组，站位
 local function grouping(RoleLayer)
@@ -33,7 +33,7 @@ local function grouping(RoleLayer)
 		end
 	end
 	
-	return Aarr, Barr
+	return Aarr, Barr, roleTbl
 end
 
 
@@ -125,20 +125,83 @@ end
 
 ----------
 function doFight(RoleLayer)
+
 	--接受分组
-	local Aarr, Barr = grouping(RoleLayer)
-	
+	local Aarr, Barr, roleTbl = grouping(RoleLayer)
+
+	for _, role in pairs(roleTbl) do
+		role:ai()	
+	end
+--[[
+	local countfight = 0
+	local endfight = false
+	while endfight == false do
 	--做行走动作
-	local array = CCArray:create()
-	for _, role in pairs(Aarr) do
-		local animate = role:action("walk")
-		local t1 = CCTargetedAction:create(role.mRoleSprite, animate)
-		--array:addObject(t1)
-		RoleLayer:runAction(t1)
+	--local array = CCArray:create()
+	for _, role in pairs(roleTbl) do
+		
+		--是否在战斗中，如果不是，则移动，是则停止
+		if role.onfight == false then
+		
+			local arr
+			if role.Horde == "A" then
+				arr = Barr
+				
+			else
+				arr = Aarr
+			end
+			local tox, toy
+			--local tempdx= 999999999999
+			--barr 的坐标	
+			for _, brole in pairs(arr) do
+				local bx, by = brole:getPosition()
+				local ax, ay = role:getPosition()
+				dx = bx - ax
+				dy = by - ay
+				
+				--CCLuaLog(bx..","..by.."----"..tostring(dx^2 + dy^2).."view"..role.view)
+				
+				--如果双方距离小于view则onfight=ture，不再移动
+				local dxy = math.sqrt(dx^2 + dy^2)
+				CCLuaLog(dxy)
+				if dxy < role.view then
+					tox = ax
+					toy = ay
+					role.onfight = true
+					CCLuaLog("111111")
+				else
+					--CCLuaLog(role.speed)
+					--if (dxy < tempdx) then
+						tox = ax + dx / dxy * role.speed
+						toy = ay + dy / dxy * role.speed
+						tempdx = dxy
+						CCLuaLog(dxy)
+					--end 
+				
+				end
+			end
+			local array = CCArray:create()
+			local animate = role:action("walk")
+			local move1 = CCMoveTo:create(0 ,ccp(10+1, 10+1))
+			local t1 = CCTargetedAction:create(role.mRoleSprite, animate)
+			local t2 = CCTargetedAction:create(role, move1) 
+			array:addObject(t1)
+			array:addObject(t2)
+			local action = CCSequence:create(array)
+			RoleLayer:runAction(action)	
+		else		
+			CCLuaLog("stop onfight")
+			countfight = countfight + 1
+			if countfight >= 4 then
+				endfight = true
+			end
+		end
 	end
 	--local action = CCSequence:create(array)
 	--RoleLayer:runAction(action)	
-
+	end
+]]
+	
 --[[
 ---------------	
 	local Tbout = 0	--回合数
