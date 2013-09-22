@@ -123,15 +123,76 @@ local function FightOrder(AUndeadRoleArr, BUndeadRoleArr, array)
 
 end
 
+
 ----------
 function doFight(RoleLayer)
 
 	--接受分组
 	local Aarr, Barr, roleTbl = grouping(RoleLayer)
+	
+	local roleb	
+	for _, role in pairs(roleTbl) do
+		
+		if role.Horde == "B" then
+			roleb = role
+			CCLuaLog(tostring(roleb))
+		end
+
+	end
+	
+	for _, role in pairs(roleTbl) do
+		role:ai(roleb)
+	
+	end
+	
+	--[[
+	local roleb	
+	for _, role in pairs(roleTbl) do
+		
+		if role.Horde == "B" then
+			roleb = role
+			CCLuaLog(tostring(roleb))
+		end
+
+	end
 
 	for _, role in pairs(roleTbl) do
-		role:ai()	
+		
+		if role.Horde == "A" then
+		
+			local function ai()
+				role:ai(roleb)
+			end
+			
+			CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(ai, 0.02, false)
+		end	
 	end
+	--------
+	local rolea	
+	for _, role in pairs(roleTbl) do
+		
+		if role.Horde == "A" then
+			rolea = role
+			CCLuaLog(tostring(rolea))
+		end
+
+	end
+
+	for _, role in pairs(roleTbl) do
+		
+		if role.Horde == "B" then
+		
+			local function ai()
+				role:ai(rolea)
+			end
+			
+			CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(ai, 0.02, false)
+		end	
+	end
+	
+	]]
+	
+	
 --[[
 	local countfight = 0
 	local endfight = false

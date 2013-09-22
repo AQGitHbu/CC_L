@@ -169,14 +169,38 @@ function Role:hit()
 end
 
 --移动
-function Role:ai()
-	local abc = 0
-	while abc<1000 do
-	local x, y = self:getPosition()
-	CCLuaLog(x..","..y)
-	x = x + 5
-	y = y + 5
-	self:setPosition(x, y)
-	abc = abc + 1
+function Role:ai(torole)
+	local ax, ay = self:getPosition()
+	CCLuaLog(ax..","..ay)
+	
+	local bx, by = torole:getPosition()
+	CCLuaLog(bx..","..by)
+	
+	dx = bx - ax
+	dy = by - ay
+	
+	--如果双方距离小于view则onfight=ture，不再移动
+	local dxy = math.sqrt(dx^2 + dy^2)
+	CCLuaLog(dxy)
+	if dxy < self.view then
+		--role.onfight = true
+		CCLuaLog("111111")
+	else
+		--CCLuaLog(role.speed)
+		--if (dxy < tempdx) then
+			ax = ax + dx / dxy * self.speed
+			ay = ay + dy / dxy * self.speed
+			tempdx = dxy
+			CCLuaLog(dxy)
+		--end 
+	
 	end
+	
+	
+	
+--	x = x + 50
+--	y = y + 50
+	
+	self:setPosition(ax, ay)
+
 end
