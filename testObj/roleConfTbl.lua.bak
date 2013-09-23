@@ -11,7 +11,7 @@ roleConfTbl = {
 		Skills = {100, 101},
 		view = 20,
 	},
-	
+	--[[
 	{
 		name = "role2",
 		RoleImgSrc_walk = "image/xuchu/xc_walk.png",
@@ -37,7 +37,7 @@ roleConfTbl = {
 		Skills = {100, 101},
 		view = 20,
 	},
-	
+	]]
 	{
 		name = "role4",
 		RoleImgSrc_walk = "image/xuchu/xc_walk.png",
