@@ -13,7 +13,7 @@ local function grouping(RoleLayer)
 	for i, roleConf in pairs(roleConfTbl) do
 		local role = Role:initCreate(roleConf)	
 		role:setPosition(fight_Position[i][1], fight_Position[i][2])
-		role:HeartBeat()
+		--role:HeartBeat()	--ÐÄÌø°ü
 		table.insert(roleTbl, role)
 		RoleLayer:addChild(role)
 	end
@@ -134,11 +134,11 @@ function doFight(RoleLayer)
 	for _, role in pairs(roleTbl) do
 		role:ai(roleTbl)
 	end
-	
+	--[[
 	for _, role in pairs(Barr) do
 		role:ai(Aarr)
 	end
-	
+	]]
 	--[[
 	local roleb	
 	for _, role in pairs(roleTbl) do

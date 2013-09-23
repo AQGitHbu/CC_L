@@ -183,32 +183,25 @@ local function move()
 	CCLuaLog(dxy .. "," .. self.view)
 	if dxy < self.view then
 		--role.onfight = true
-		CCLuaLog("111111")
+		--CCLuaLog("111111")
 		CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(self.MoveTimer)
 		
 				
 	else
 		--CCLuaLog(role.speed)
-		--if (dxy < tempdx) then
+		
 			ax = ax + dx / dxy * self.speed
 			ay = ay + dy / dxy * self.speed
-			tempdx = dxy
 			CCLuaLog(dxy)
-		--end 
 	
 	end
-	
-	
-	
---	x = x + 50
---	y = y + 50
 	
 	self:setPosition(ax, ay)
 
 end
 	self.MoveTimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(move, 0.02, false)
 end
-
+--[[
 function doAI(Id, roleTbl)
  local t = {}
  local Module = setenv(loadfile("file" .. Id ), t)()
@@ -217,8 +210,11 @@ function doAI(Id, roleTbl)
  	Module.Action(Target)
  	return true
  end 
-
-local function ai()
+end
+]]
+function Role:ai(roleTbl)
+	
+	function ai()
 	local ax, ay = self:getPosition()
 	CCLuaLog(ax..","..ay)
 	
@@ -226,36 +222,36 @@ local function ai()
 	local Target 
 	for _, torole in pairs(roleTbl) do
 		if torole.Horde ~= self.Horde then
-		local bx, by = torole:getPosition()
-		CCLuaLog(bx..","..by)
-	
-		dx = bx - ax
-		dy = by - ay
-	
-	--如果双方距离小于view则onfight=ture，不再移动
-		local dxy = math.sqrt(dx^2 + dy^2)
-		if ((not mMinDistance) or  (mMinDistance >= dxy)) then
-			Target = torole
-			mMinDistance = dxy
-		end
+			local bx, by = torole:getPosition()
+			CCLuaLog(bx..","..by)
+		
+			dx = bx - ax
+			dy = by - ay
+		
+		--如果双方距离小于view则onfight=ture，不再移动
+			local dxy = math.sqrt(dx^2 + dy^2)
+			if ((not mMinDistance) or  (mMinDistance >= dxy)) then
+				Target = torole
+				mMinDistance = dxy
+			end
 		end
 	end
 	if Target then
+		--如果在行走中，先停止
 		if self.MoveTimer then
-		CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(self.MoveTimer)
+			CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(self.MoveTimer)
 		end
 		local x, y = Target:getPosition()
 		self:move(x, y)
 		
 	end
-
-
+	end
+	
+	self.AITimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(ai, 0.3, false)
 	
 end
-	
-end
 
-
+--[[
 function Role:ai(roleTbl)
 
 	for _, Id in pairs(AIList) do
@@ -278,3 +274,5 @@ function Role:HeartBeat()
 	
 	 self.HBTimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(HB, 0.61, false)
 end
+
+]]
