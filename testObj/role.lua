@@ -40,6 +40,7 @@ function Role:setObjData(RoleObjData)
 		"Horde",
 		"Skills",
 		"view",
+		"AIList"
 	}
 	
 	--建立角色数据
@@ -201,6 +202,7 @@ local function move()
 end
 	self.MoveTimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(move, 0.02, false)
 end
+
 --[[
 function doAI(Id, roleTbl)
  local t = {}
@@ -212,6 +214,7 @@ function doAI(Id, roleTbl)
  end 
 end
 ]]
+
 function Role:ai(roleTbl)
 	
 	function ai()
@@ -251,28 +254,29 @@ function Role:ai(roleTbl)
 	
 end
 
---[[
+
 function Role:ai(roleTbl)
 
-	for _, Id in pairs(AIList) do
+	for _, Id in pairs(self.AIList) do
 		doAI(Id, roleTbl)
 	end
 	
 	
 end
 
+--[[上面统一赋值
 function Role:AddAIList(List)
-self.AILIst = List
+	self.AILIst = List
 end
+]]
 
-function Role:HeartBeat()
+
+function Role:HeartBeat(roleTbl)
 	function  HB()
 		
 			self:ai(roleTbl)
 		
 	end
 	
-	 self.HBTimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(HB, 0.61, false)
+	 self.HBTimer = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(HB, 0.02, false)
 end
-
-]]

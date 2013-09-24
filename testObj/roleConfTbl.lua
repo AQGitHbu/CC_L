@@ -10,6 +10,7 @@ roleConfTbl = {
 		Horde = "A",
 		Skills = {100, 101},
 		view = 20,
+		AIList = {1000}
 	},
 	
 	{
@@ -23,6 +24,7 @@ roleConfTbl = {
 		Horde = "A",
 		Skills = {100, 101},
 		view = 20,
+		AIList = {1000}
 	},
 	
 	{
@@ -36,6 +38,7 @@ roleConfTbl = {
 		Horde = "B",
 		Skills = {100, 101},
 		view = 20,
+		AIList = {1000}
 	},
 	
 	{
@@ -49,6 +52,7 @@ roleConfTbl = {
 		Horde = "B",
 		Skills = {100, 101},
 		view = 20,
+		AIList = {1000}
 	},
 
 }
