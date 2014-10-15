@@ -11,7 +11,7 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>http://192.168.9.102/ForTest.ipa</string>
+					<string>http://192.168.18.140:888/Sanguo.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
