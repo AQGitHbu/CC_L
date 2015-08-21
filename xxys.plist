@@ -17,13 +17,13 @@
 			<key>metadata</key>
 			<dict>
 				<key>bundle-identifier</key>
-				<string>com.Teamtopgame.ForTest</string>
+				<string>com.Teamtopgame.xxys</string>
 				<key>bundle-version</key>
 				<string>1.0</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
-				<string>《大兵小将》</string>
+				<string>《小小勇士》</string>
 			</dict>
 		</dict>
 	</array>
