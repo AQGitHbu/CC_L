@@ -11,7 +11,7 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>http://10.30.90.40:8081/upload/Y2_sz.ipa</string>
+					<string>http://192.168.30.243:8081/upload/Y2_sz.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
